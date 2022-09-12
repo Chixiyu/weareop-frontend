@@ -15,51 +15,46 @@
 
 
 <!--          </a-row>-->
-          <div class="main_row">
-            <div class="leftone">
-              <div class="video_cover">
-              <img :src="imagelink" class="video_cover"/>
-              </div>
-            </div>
-            <div class="leftone">
-              <div class="video_cover">
-                <img :src="imagelink" class="video_cover"/>
-              </div>
-            </div>
-            <div class="leftone">
-              <div class="video_cover">
-                <img :src="imagelink" class="video_cover"/>
-              </div>
-            </div>
-            <div class="leftone">
-              <div class="video_cover">
-                <img :src="imagelink" class="video_cover"/>
-              </div>
-            </div>
-          </div>
-            <div class="main_row">
-              <div class="leftone">
-                <div class="video_cover">
-                  <img :src="imagelink" class="video_cover"/>
-                </div>
-              </div>
-              <div class="leftone">
-                <div class="video_cover">
-                  <img :src="imagelink" class="video_cover"/>
-                </div>
-              </div>
-              <div class="leftone">
-                <div class="video_cover">
-                  <img :src="imagelink" class="video_cover"/>
-                </div>
-              </div>
-              <div class="leftone">
-                <div class="video_cover">
-                  <img :src="imagelink" class="video_cover"/>
-                </div>
-              </div>
-          </div>
+<!--          <div class="main_row">-->
+<!--            <div class="leftone">-->
+<!--              <div class="video_cover" >-->
+<!--&lt;!&ndash;                <img :src=item class="video_cover" v-for="(item,index) in imagelink" :key="index"/>&ndash;&gt;-->
+<!--                <img :src=item class="video_cover"/>-->
+<!--                <img :src=item class="video_cover"/>-->
+<!--                <img :src=item class="video_cover"/>-->
+<!--                <img :src=item class="video_cover"/>-->
 
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <a-space direction="horizontal" v-for="(item,index) in imagelink" :key="index">-->
+<!--            <a-card style="width: 300px" :bordered="false" :size="0">-->
+<!--              <img :src="item" class="video_cover">-->
+<!--            </a-card>-->
+<!--            <a-card style="width: 300px">-->
+
+<!--            </a-card>-->
+<!--          </a-space>-->
+<!--          <a-space direction="horizontal">-->
+<!--            <table>-->
+
+<!--            <div v-for="(item,index) in imagelink" :key="index" class="video_cover_big">-->
+<!--              <a-card style="width: 300px" :bordered="false">-->
+<!--                <img :src="item" class="video_cover">-->
+<!--              </a-card>-->
+<!--            </div>-->
+<!--            </table>-->
+<!--          </a-space>-->
+
+          <a-list :grid="{ gutter:0, column: 6 }" :data-source="imagelink">
+            <template #renderItem="{ item }">
+              <a-list-item class="main_video_body">
+                  <img :src="item" class="video_cover">
+              </a-list-item>
+            </template>
+          </a-list>
+          
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -68,62 +63,61 @@
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue';
+
+
+
 export default defineComponent({
   setup() {
-    const x=ref();
-    const imagelink=ref();
-    imagelink.value='http://192.168.1.102:2000/chfs/shared/1d06036458e8722deb147e3c6ec71b7f2be9b5b4.jpg'
-    x.value=10;
+    const imagelink=ref<string[]>([]);
+    for (var i = 0; i < 48; i ++){
+        imagelink.value.push('http://192.168.1.102:2000/chfs/shared/1d06036458e8722deb147e3c6ec71b7f2be9b5b4.jpg');
+    }
     return {
-      x,
       selectedKeys1: ref<string[]>(['2']),
       selectedKeys2: ref<string[]>(['1']),
       collapsed: ref<boolean>(false),
       openKeys: ref<string[]>(['sub1']),
-      imagelink
+      imagelink,
     };
+
   },
+
 });
+
+
 </script>
 
 <style>
+.ant-card ant-card-bordered{
+  display: none;
+}
+.video_cover_big{
+  /*clear: both;*/
+
+}
+.main_video_body{
+  margin: 0 auto;
+  width: 275px;
+}
+.card_body{
+  justify-content: center;
+}
+div{word-break:break-all;}
 .video_cover{
   width: 275px;
   height: 154px;
   border-radius: 10px;
   display: block;
+  margin: 0 auto;
 }
 .main_row{
   height: 250px;
-  display: flex;
   justify-content: center;
 }
-.leftone{
-  background-color: white;
-  /*margin-left: 10px;*/
-  /*float: right;*/
-  /*margin-right:75px;*/
-  /*list-style:none;*/
-  flex: 1;
-  margin-left: 93.5px;
-  margin-right: 93.5px;
-}
+
 
 .video_div{
   background-color: black;
 }
-#components-layout-demo-top-side-2 .logo {
-  float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.ant-row-rtl #components-layout-demo-top-side-2 .logo {
-  float: right;
-  margin: 16px 0 16px 24px;
-}
-
 
 </style>
