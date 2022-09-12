@@ -47,10 +47,33 @@
 <!--            </table>-->
 <!--          </a-space>-->
 
-          <a-list :grid="{ gutter:0, column: 6 }" :data-source="imagelink">
+          <a-list :grid="{ gutter:0, column: 6 }" :data-source="videoData">
             <template #renderItem="{ item }">
               <a-list-item class="main_video_body">
-                  <img :src="item" class="video_cover">
+                <router-link to="{{item.video}}">
+                  <div>
+                    <img :src="item.cover" class="video_cover">
+                    <div class="playnum">
+                      <p class="playnum_word">{{item.viewCount}}</p>
+                      <PlaySquareOutlined class="playnum_icon"/>
+                    </div>
+
+                  <div class="video_info">
+                    <p class="title">{{item.name}}</p>
+                    <div class="upinfo">
+                    <div class="upname"><p class="name">{{item.upName}}</p>
+                      <div class="tag" :style="tagStyle(item.upTagColor)">
+
+                        <p class="uptag">{{item.upTagText}}</p>
+                      </div>
+                    </div>
+
+<!--                    <p class="date">9-12</p>-->
+
+                  </div>
+                  </div>
+                  </div>
+                </router-link>
               </a-list-item>
             </template>
           </a-list>
@@ -62,16 +85,31 @@
 
 <script lang="ts">
 
-import { defineComponent, ref } from 'vue';
-
-
+import {defineComponent, ref, toRaw} from 'vue';
+import {PlaySquareOutlined } from '@ant-design/icons-vue'
+import axios from "axios";
+import {onMounted} from "vue";
 
 export default defineComponent({
-  setup() {
-    const imagelink=ref<string[]>([]);
-    for (var i = 0; i < 48; i ++){
-        imagelink.value.push('http://192.168.1.102:2000/chfs/shared/1d06036458e8722deb147e3c6ec71b7f2be9b5b4.jpg');
+  components:{
+    PlaySquareOutlined
+  },
+  methods:{
+    tagStyle (tagColor:any){
+      return {
+        // background: 'purple'
+        background: tagColor,
+      };
     }
+  },
+  setup() {
+    const videoData=ref();
+    onMounted(()=>{
+      axios.get('http://192.168.1.102:1000/videos',{
+      }).then((response)=>{
+        videoData.value=response.data;
+      })
+    })
     return {
       selectedKeys1: ref<string[]>(['2']),
       selectedKeys2: ref<string[]>(['1']),
@@ -84,20 +122,72 @@ export default defineComponent({
 
 });
 
-
 </script>
 
 <style>
+.uptag{
+  color: white;
+  font-size: 10px;
+  margin-bottom: -10px;
+  width: fit-content;
+}
+.name{
+  width: fit-content;
+  display: inline-block;
+}
+.tag{
+  width: fit-content;
+  height: 17px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 5px;
+  margin-left: 10px;
+  /*background-color: purple;*/
+  /*margin-bottom: 100px;*/
+  display: inline-block;
+}
+.video_info{
+  height: 130px;
+}
+.upname{
+  width: 200px;
+  color: black;
+}
+.title{
+  color: black;
+  width: fit-content;
+  height: fit-content;
+
+}
+.date{
+  float: right;
+}
 .ant-card ant-card-bordered{
   display: none;
+}
+.playnum_icon{
+  position: relative;
+  bottom: 35px;
+}
+.playnum_word{
+  position: relative;
+  left: 20px;
 }
 .video_cover_big{
   /*clear: both;*/
 
 }
+.playnum{
+  position: relative;
+  bottom: 30px;
+  height: 14px;
+  color: white;
+  left: 10px;
+}
 .main_video_body{
   margin: 0 auto;
   width: 275px;
+  height: 154px;
 }
 .card_body{
   justify-content: center;

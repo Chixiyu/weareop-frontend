@@ -25,8 +25,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # Needed Json data type/name
 
-//
-
 ## Video 
 
 1. 视频封面
@@ -36,7 +34,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 3. up名字
    - String
 4. 播放量
-   - String  
+   - Long
+
+5. 视频链接
+   - Stirng
+  
 
 ## login page
 - Login
