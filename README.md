@@ -52,7 +52,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
      - 如果为true就登录成功
 - Register
   1. User Name
+     - string
   2. Repeted password
-     - 
+     - String （加密）
   3. 暗号
      - 为String 如果错误就直接break
