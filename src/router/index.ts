@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     name:'articles',
     component:()=>import('../views/ArticlesView.vue')
   },
+  {
+    path: '/spaces',
+    name: 'spaces',
+    component:()=>import('../views/SpacesView.vue')
+  }
 ]
 
 const router = createRouter({

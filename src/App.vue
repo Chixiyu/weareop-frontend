@@ -1,6 +1,7 @@
 <template>
     <HeaderFrame></HeaderFrame>
     <router-view/>
+
 </template>
 
 <style>
