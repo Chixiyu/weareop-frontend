@@ -4,6 +4,13 @@
       <a-breadcrumb style="margin: 16px 0">
         <a-breadcrumb-item>Videos</a-breadcrumb-item>
       </a-breadcrumb>
+      <a-layout style="padding-bottom: 24px">
+
+      <a-layout-content
+          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '100px', display: 'inline' }"
+      >
+      </a-layout-content>
+      </a-layout>
       <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px', display: 'inline' }"
       >
@@ -90,7 +97,9 @@ import axios from "axios";
 import {onMounted} from "vue";
 import router from "@/router";
 import {getClientSize} from "ant-design-vue/es/vc-util/Dom/css";
-interface UserData{
+import { message } from 'ant-design-vue';
+
+interface UserData {
   id: number;
   upName: string;
   upTagColor: string;
@@ -123,61 +132,80 @@ export default defineComponent({
     const colums = ref(7);
     const videoData = ref();
     const testShow = ref<boolean>(true);
-    const token= ref();
+    const token = ref();
+
     let userdata: UserData;
     const clientwidth = ref();
     onMounted(() => {
-      const windowwidth = ref(document.documentElement.clientWidth);
 
       token.value = sessionStorage.getItem('token');
-      if (windowwidth.value >= 1822 && windowwidth.value < 2119){
-        colums.value = 6;
-      } else if (windowwidth.value >= 2119 && windowwidth.value < 3179){
-        colums.value = 7;
-      } else if (windowwidth.value >= 3179 && windowwidth.value < 4267){
-        colums.value = 8;
-      } else if (windowwidth.value >= 4267){
-        colums.value = 9;
-      }else if (windowwidth.value >= 1611 && windowwidth.value < 1822){
-        colums.value = 5;
-      } else if (windowwidth.value >= 1483 && windowwidth.value < 1611){
-        colums.value = 4;
-      } else if (windowwidth.value >= 1272 && windowwidth.value < 1483){
-        colums.value = 3;
-      } else if (windowwidth.value >= 1017 && windowwidth.value < 1272){
-        colums.value = 2;
-      }
-      nextTick(()=> {
+
+      nextTick(() => {
+        const windowwidth = ref(document.documentElement.clientWidth);
+        if (windowwidth.value >= 1822 && windowwidth.value < 2119) {
+          colums.value = 6;
+        } else if (windowwidth.value >= 2119 && windowwidth.value < 3179) {
+          colums.value = 7;
+        } else if (windowwidth.value >= 3179 && windowwidth.value < 4267) {
+          colums.value = 8;
+        } else if (windowwidth.value >= 4267) {
+          colums.value = 9;
+        } else if (windowwidth.value >= 1611 && windowwidth.value < 1822) {
+          colums.value = 5;
+        } else if (windowwidth.value >= 1483 && windowwidth.value < 1611) {
+          colums.value = 4;
+        } else if (windowwidth.value >= 1017 && windowwidth.value < 1483) {
+          colums.value = 3;
+        } else if (windowwidth.value < 1272) {
+          colums.value = 2;
+        }
         window.onresize = () => {
           const windowwidth = ref(document.documentElement.clientWidth);
           console.log(windowwidth.value)
-          if (windowwidth.value >= 1822 && windowwidth.value < 2119){
+          if (windowwidth.value >= 1822 && windowwidth.value < 2119) {
             colums.value = 6;
-          } else if (windowwidth.value >= 2119 && windowwidth.value < 3179){
+          } else if (windowwidth.value >= 2119 && windowwidth.value < 3179) {
             colums.value = 7;
-          } else if (windowwidth.value >= 3179 && windowwidth.value < 4267){
+          } else if (windowwidth.value >= 3179 && windowwidth.value < 4267) {
             colums.value = 8;
-          } else if (windowwidth.value >= 4267){
+          } else if (windowwidth.value >= 4267) {
             colums.value = 9;
-          }else if (windowwidth.value >= 1611 && windowwidth.value < 1822){
+          } else if (windowwidth.value >= 1611 && windowwidth.value < 1822) {
             colums.value = 5;
-          } else if (windowwidth.value >= 1483 && windowwidth.value < 1611){
+          } else if (windowwidth.value >= 1483 && windowwidth.value < 1611) {
             colums.value = 4;
-          } else if (windowwidth.value >= 1272 && windowwidth.value < 1483){
+          } else if (windowwidth.value >= 1272 && windowwidth.value < 1483) {
             colums.value = 3;
-          } else if (windowwidth.value >= 1017 && windowwidth.value < 1272){
+          } else if (windowwidth.value < 1272) {
             colums.value = 2;
           }
         }
       })
-      axios.get('/videos', {headers:{'token': token.value}}).then((response) => {
+      axios.get('/videos', {headers: {'token': token.value}}).then((response) => {
         videoData.value = response.data;
         // console.log(response.data);
         console.log(videoData.value);
+      }).catch((error) => {
+        console.log(error.response.status);
+        if (error.response.status == 401) {
+          sessionStorage.clear();
+          // message.info('登录已过期 请重新登录');
+        }
       });
       if (sessionStorage.getItem('token') != null) {
         axios.post('/login?token=' + token.value).then((userdatatemp) => {
-          userdata = {id: userdatatemp.data.id, upName: userdatatemp.data.upName, upTagColor: userdatatemp.data.upTagColor, upTagText: userdatatemp.data.upTagText, subscribe: userdatatemp.data.subscribe, totalViewCount: userdatatemp.data.totalViewCount, totalLikeCount: userdatatemp.data.totalLikeCount, totalCoinCount: userdatatemp.data.totalCoinCount, totalCollectCount: userdatatemp.data.totalCollectCount, password: userdatatemp.data.password}
+          userdata = {
+            id: userdatatemp.data.id,
+            upName: userdatatemp.data.upName,
+            upTagColor: userdatatemp.data.upTagColor,
+            upTagText: userdatatemp.data.upTagText,
+            subscribe: userdatatemp.data.subscribe,
+            totalViewCount: userdatatemp.data.totalViewCount,
+            totalLikeCount: userdatatemp.data.totalLikeCount,
+            totalCoinCount: userdatatemp.data.totalCoinCount,
+            totalCollectCount: userdatatemp.data.totalCollectCount,
+            password: userdatatemp.data.password
+          }
           console.log(userdatatemp)
         });
       }
