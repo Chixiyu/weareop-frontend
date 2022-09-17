@@ -59,8 +59,8 @@
         <a-list :grid="{ gutter:0, column: colums }" :data-source="videoData">
           <template #renderItem="{ item }">
             <a-list-item class="main_video_body">
-              <router-link to="{{item.video}}">
-                <div>
+
+                <div @click="goVideo(item.videoId)">
                   <img :src="item.cover" class="video_cover">
                   <div class="playnum">
                     <p class="playnum_word">{{ item.viewCount }}</p>
