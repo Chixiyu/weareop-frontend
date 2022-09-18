@@ -22,6 +22,48 @@
           <a-menu-item key="3">直播</a-menu-item>
 
         </router-link>
+
+        <div class="weather">
+          <div class="box sunShower">
+            <div class="cloud"></div>
+            <div class="sun">
+              <div class="rays"></div>
+            </div>
+          </div>
+
+          <div class="box sunny">
+            <div class="sun">
+              <div class="rays"></div>
+            </div>
+          </div>
+
+          <div class="box cloudy">
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+          </div>
+
+
+          <div class="box rainy">
+            <div class="cloud"></div>
+            <div class="rain"></div>
+          </div>
+
+          <div class="box thunderStorm">
+            <div class="cloud"></div>
+            <div class="lightning">
+              <div class="bolt"></div>
+              <div class="bolt"></div>
+            </div>
+          </div>
+
+          <div class="box flurries">
+            <div class="cloud"></div>
+            <div class="snow">
+              <div class="flake"></div>
+              <div class="flake"></div>
+            </div>
+          </div>
+        </div>
         <!--        <router-link to="/spaces">-->
 <!--        <a-menu-item key="4" class="userspace">-->
         <router-link to="/spaces" @click="key4">
@@ -133,7 +175,7 @@
           :rules="[{ required: true, message: 'Please input your password!' }]"
 
       >
-        <a-input-password v-model:value="confirm"/>
+        <a-input-password v-model:value="formState.password"/>
 
       </a-form-item>
 
@@ -156,10 +198,11 @@
         @finish="onFinishRegister"
         class="mainform"
         @finishFailed="onFinishFailed"
-        v-show="!isActive">
+        v-show="!isActive"
+    >
       <a-form-item
           label="用户名"
-          name="register_username"
+          name="username"
 
           :rules="[{ required: true, message: 'Please input your username!' }]"
 
@@ -173,24 +216,28 @@
           :rules="[{ required: true, message: 'Please input your password!' }]"
 
       >
-        <a-input-password v-model:value="formState.password"/>
+        <a-input-password v-model:value="formState.passwordc"/>
+
       </a-form-item>
       <a-form-item
           label="确认密码"
-          name="password"
-          :rules="[{equals: 'password', message: 'Please input your password!' }]"
+          name="passwordc"
+          :rules="[{ required: true, message: 'Please input your password!' }]"
 
       >
         <a-input-password v-model:value="formState.passwordc"/>
 
       </a-form-item>
+<!--      <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">-->
+<!--        <a-checkbox v-model:checked="formState.remember">记住密码</a-checkbox>-->
+<!--      </a-form-item>-->
+
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit" style="border-radius: 20px">注册</a-button>
-        <a-button style="margin-left: 10px; border-radius: 20px" @click="edit">返回登录</a-button>
+        <a-button type="primary" html-type="submit" style="border-radius: 20px">登录</a-button>
+        <a-button style="margin-left: 10px; border-radius: 20px" @click="edit">注册</a-button>
 
       </a-form-item>
     </a-form>
-
   </a-drawer>
 </template>
 
@@ -215,8 +262,14 @@ interface FormState {
   username: string;
   password: string;
   remember: boolean;
+  passwordc: string;
 }
+interface reg {
+  username :string;
+  password: string;
+  passwordc: string;
 
+}
 export default {
 
 
@@ -252,7 +305,7 @@ export default {
     const isTokenFalse = ref<boolean>(true);
     const isActive = ref<boolean>(true);
     onMounted(() => {
-      token.value = sessionStorage.getItem('token');
+      token.value = localStorage.getItem('token');
 
       if (token.value == null) {
         isTokenFalse.value = false;
@@ -262,6 +315,9 @@ export default {
 
 
     })
+    const onFinishRegister = () => {
+      console.log('tst')
+    }
 
     const showConfirm = () => {
       Modal.confirm({
@@ -269,7 +325,7 @@ export default {
         icon: createVNode(ExclamationCircleOutlined),
         // content: createVNode('div', { style: 'color:red;' }, 'Some descriptions'),
         onOk() {
-          sessionStorage.clear();
+          localStorage.clear();
           axios.get('/logout', {headers: {'token': token.value}})
           setInterval(function () {
             window.location.href = '/';
@@ -283,18 +339,24 @@ export default {
       });
     };
 
-    const confirm = (e: MouseEvent) => {
-      console.log(e);
-      message.success('Click on Yes');
-    };
-    const cancel = (e: MouseEvent) => {
-      console.log(e);
-      message.error('Click on No');
-    };
+    // const confirm = (e: MouseEvent) => {
+    //   console.log(e);
+    //   message.success('Click on Yes');
+    // };
+    // const cancel = (e: MouseEvent) => {
+    //   console.log(e);
+    //   message.error('Click on No');
+    // };
     const formState = reactive<FormState>({
       username: '',
       password: '',
       remember: true,
+      passwordc: '',
+    });
+    const register = reactive<reg>({
+      username: '',
+      password: '',
+      passwordc: '',
     });
     //methods
     const edit = () => {
@@ -308,10 +370,10 @@ export default {
           password: values.password
         }
       }).then((response) => {
-        console.log(sessionStorage.getItem('token'))
-        sessionStorage.setItem('token', response.data.token);
+        console.log(localStorage.getItem('token'))
+        localStorage.setItem('token', response.data.token);
         console.log(response);
-        console.log(sessionStorage.getItem('token'))
+        console.log(localStorage.getItem('token'))
 
       })
       console.log('Success:', values);
@@ -321,7 +383,7 @@ export default {
       }, 500)
     };
     // const logout = () => {
-    //   sessionStorage.clear();
+    //   localStorage.clear();
     //   axios.get('/logout',{headers:{'token': token.value}})
     //   setInterval(function (){
     //     window.location.href='/';
@@ -352,10 +414,11 @@ export default {
       isActive,
       edit,
       // logout,
-      confirm,
-      cancel,
+      // confirm,
+      // cancel,
       showConfirm,
-
+      register,
+      onFinishRegister,
     }
 
   },
@@ -485,4 +548,275 @@ function isLogined() {
 .site-layout-background {
   background: #fff;
 }
+
+:root {
+  --color: #B9DEFF;
+  --sunColor: #FFCA22;
+  --downColor: rgba(18, 117, 204, 1);
+  --downColor2: rgba(18, 117, 204, 0.2);
+  --start: #81C5F8;
+  --end: #1181DF;
+}
+
+.sunShower .sun {
+  margin: -32px 16px;
+}
+
+.sun {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: var(--sunColor);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  color: var(--sunColor);
+  box-shadow: 0 0 0 6px;
+  animation: spin 12s infinite linear;
+}
+:root {
+  --color: #B9DEFF;
+  --sunColor: #FFCA22;
+  --downColor: rgba(18, 117, 204, 1);
+  --downColor2: rgba(18, 117, 204, 0.2);
+  --start: #81C5F8;
+  --end: #1181DF;
+}
+body {
+  height: 100vh;
+  background: radial-gradient(var(--start), var(--end));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  /* border: 1px solid red; */
+  box-sizing: border-box;
+  position: relative;
+}
+.cloud {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+  color: var(--color);
+  box-shadow: 0 0 0 6px,
+  -35px 11px 0px -5px,
+  33px 15px 0px -9px;
+  z-index: 1;
+}
+.cloud::after {
+  content: '';
+  position: absolute;
+  width: 110%;
+  height: 6px;
+  background: var(--color);
+  bottom: -6px;
+  left: -6px;
+}
+.sunShower .sun {
+  margin: -32px 16px;
+}
+.sun {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: var(--sunColor);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  color: var(--sunColor);
+  box-shadow: 0 0 0 6px;
+  animation: spin 12s infinite linear;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.rays {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  background-color: var(--sunColor);
+  top: -32px;
+  left: 50%;
+  margin-left: -3px;
+  border-radius: 4px;
+  box-shadow: 0px 86px;
+}
+.rays::before,
+.rays::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  background-color: var(--sunColor);
+  transform: rotate(60deg);
+  transform-origin: 3px 52px;
+  box-shadow: 0px 86px;
+  border-radius: 4px;
+}
+.rays::after {
+  transform: rotate(120deg);
+}
+.cloudy .cloud:nth-child(2) {
+  transform: scale(0.5) translate(96px, -48px);
+  opacity: 0.7;
+  animation: cloud 5s infinite linear;
+  animation-direction: alternate;
+}
+@keyframes cloud {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(0.5) translate(-96px, -48px);
+  }
+}
+.rain,
+.lightning,
+.snow {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  /* border: 1px solid red; */
+  top: 50%;
+  left: 50%;
+  margin-left: -30px;
+  margin-top: 6px;
+  z-index: 2;
+}
+.rain::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: var(--downColor);
+  border-radius: 100% 0% 60% 50% / 60% 0% 100% 50%;
+  color: var(--downColor);
+  box-shadow: 10px 14px 0px -4px,
+  -14px 18px 0 -2px,
+  -22px -2px 0 -2px;
+  left: 50%;
+  top: 50%;
+  margin-left: -9px;
+  margin-top: -9px;
+  transform: rotate(-28deg);
+  opacity: 0.5;
+  animation: rain 3s linear infinite;
+}
+@keyframes rain {
+  0% {
+    box-shadow: 10px 14px 0px -4px var(--downColor2),
+    -14px 18px 0 -2px var(--downColor2),
+    -22px -2px 0 -2px var(--downColor);
+  }
+  25% {
+    box-shadow: 10px 14px 0px -4px var(--downColor2),
+    -14px 18px 0 -2px var(--downColor),
+    -22px -2px 0 -2px var(--downColor2);
+  }
+  50% {
+    box-shadow: 10px 14px 0px -4px var(--downColor),
+    -14px 18px 0 -2px var(--downColor2),
+    -22px -2px 0 -2px var(--downColor2);
+  }
+  100% {
+    box-shadow: 10px 14px 0px -4px var(--downColor2),
+    -14px 18px 0 -2px var(--downColor2),
+    -22px -2px 0 -2px var(--downColor);
+  }
+}
+.bolt {
+  position: absolute;
+  color: var(--downColor);
+  left: 6px;
+  top: 6px;
+  opacity: 0.5;
+}
+.bolt::before,
+.bolt::after {
+  position: absolute;
+  content: '';
+  border-top: 20px solid transparent;
+  border-right: 12px solid;
+  border-bottom: 12px solid;
+  border-left: 8px solid transparent;
+}
+.bolt::after {
+  border-top: 12px solid;
+  border-right: 8px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 12px solid;
+  left: 13px;
+  top: 23px;
+}
+.bolt:nth-child(2) {
+  transform: translate(19px, 36px) scale(0.5);
+  opacity: 0.3;
+  animation: lightning 2s linear infinite;
+}
+@keyframes lightning {
+  45% {
+    color: var(--downColor);
+    opacity: 0.3;
+  }
+  50% {
+    color: var(--downColor);
+    opacity: 0.5;
+  }
+  55% {
+    color: var(--downColor);
+    opacity: 0.3;
+  }
+}
+.flake::before,
+.flake::after {
+  content: '\2744';
+  font-size: 16px;
+  color: var(--downColor);
+  opacity: 0.5;
+  position: absolute;
+}
+.flake::before {
+  left: 10px;
+  top: 10px;
+  animation: spin 10s linear infinite reverse;
+}
+.flake::after {
+  left: 23px;
+  top: 16px;
+  animation: spin 16s linear infinite;
+}
+.flake:nth-child(2):before {
+  left: 6px;
+  top: 30px;
+  animation: spin 10s linear infinite;
+}
+.flake:nth-child(2)::after {
+  left: 26px;
+  top: 36px;
+  animation: spin 13s linear infinite reverse;
+}
+
 </style>

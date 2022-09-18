@@ -79,7 +79,6 @@
                     </div>
                   </div>
                 </div>
-              </router-link>
             </a-list-item>
           </template>
         </a-list>
@@ -126,7 +125,14 @@ export default defineComponent({
         background: tagColor,
       };
     },
-
+  goVideo(videoId: any){
+      console.log(videoId);
+      let routeInfo = this.$router.resolve({
+                        path: "/video",
+                        query:{videoId}
+                      })
+    window.open(routeInfo.href, '_blank')
+  }
   },
   setup() {
     const colums = ref(7);
@@ -136,9 +142,10 @@ export default defineComponent({
 
     let userdata: UserData;
     const clientwidth = ref();
+
     onMounted(() => {
 
-      token.value = sessionStorage.getItem('token');
+      token.value = localStorage.getItem('token');
 
       nextTick(() => {
         const windowwidth = ref(document.documentElement.clientWidth);
@@ -188,11 +195,11 @@ export default defineComponent({
       }).catch((error) => {
         console.log(error.response.status);
         if (error.response.status == 401) {
-          sessionStorage.clear();
+          localStorage.clear();
           // message.info('登录已过期 请重新登录');
         }
       });
-      if (sessionStorage.getItem('token') != null) {
+      if (localStorage.getItem('token') != null) {
         axios.post('/login?token=' + token.value).then((userdatatemp) => {
           userdata = {
             id: userdatatemp.data.id,
@@ -209,8 +216,8 @@ export default defineComponent({
           console.log(userdatatemp)
         });
       }
-      // sessionStorage.setItem('token','testr');
-      console.log(sessionStorage.getItem('token'));
+      // localStorage.setItem('token','testr');
+      console.log(localStorage.getItem('token'));
     })
     return {
       selectedKeys1: ref<string[]>(['2']),

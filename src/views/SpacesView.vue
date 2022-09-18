@@ -213,7 +213,7 @@ export default defineComponent({
           }
         }
       });
-      token.value = sessionStorage.getItem('token');
+      token.value = localStorage.getItem('token');
       axios.get('/videos', {headers: {'token': token.value}}).then((response) => {
         videoData.value = response.data;
         spinning.value = false;
@@ -222,7 +222,7 @@ export default defineComponent({
       }).catch((error) => {
         console.log(error.response.status);
         if (error.response.status == 401) {
-          sessionStorage.clear();
+          localStorage.clear();
           setInterval(function () {
             window.location.href = '/';
 
@@ -260,7 +260,7 @@ export default defineComponent({
       }).catch((error) => {
         console.log(error.response.status);
         if (error.response.status == 401) {
-          sessionStorage.clear();
+          localStorage.clear();
           setInterval(function () {
             window.location.href = '/';
 

@@ -24,6 +24,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/spaces',
     name: 'spaces',
     component:()=>import('../views/SpacesView.vue')
+  },
+  {
+    path: '/video',
+    name: 'video',
+    component:() => import('../views/VideoView.vue')
   }
 ]
 
