@@ -122,7 +122,6 @@ import {defineComponent, nextTick, onMounted, ref, h} from "vue";
 import axios from "axios";
 import {PlaySquareOutlined, PayCircleOutlined, LikeOutlined} from "@ant-design/icons-vue";
 import {message} from "ant-design-vue";
-import ElementPlus from 'element-plus'
 import {LoadingOutlined} from '@ant-design/icons-vue';
 import 'element-plus/dist/index.css'
 
