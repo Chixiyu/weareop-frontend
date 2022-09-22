@@ -379,6 +379,7 @@ export default defineComponent({
   width: 275px;
   font-family: MiSans;
   margin: 0 auto;
+  margin-top: 30px;
 }
 
 .avater:hover {
@@ -484,6 +485,8 @@ export default defineComponent({
   width: 275px;
   height: 200px;
   text-align: center;
+  margin-top: 50px;
+
 }
 
 .card_body {

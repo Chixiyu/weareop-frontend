@@ -23,47 +23,47 @@
 
         </router-link>
 
-        <div class="weather">
-          <div class="box sunShower">
-            <div class="cloud"></div>
-            <div class="sun">
-              <div class="rays"></div>
-            </div>
-          </div>
+<!--        <div class="weather">-->
+<!--          <div class="box sunShower">-->
+<!--            <div class="cloud"></div>-->
+<!--            <div class="sun">-->
+<!--              <div class="rays"></div>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="box sunny">
-            <div class="sun">
-              <div class="rays"></div>
-            </div>
-          </div>
+<!--          <div class="box sunny">-->
+<!--            <div class="sun">-->
+<!--              <div class="rays"></div>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="box cloudy">
-            <div class="cloud"></div>
-            <div class="cloud"></div>
-          </div>
+<!--          <div class="box cloudy">-->
+<!--            <div class="cloud"></div>-->
+<!--            <div class="cloud"></div>-->
+<!--          </div>-->
 
 
-          <div class="box rainy">
-            <div class="cloud"></div>
-            <div class="rain"></div>
-          </div>
+<!--          <div class="box rainy">-->
+<!--            <div class="cloud"></div>-->
+<!--            <div class="rain"></div>-->
+<!--          </div>-->
 
-          <div class="box thunderStorm">
-            <div class="cloud"></div>
-            <div class="lightning">
-              <div class="bolt"></div>
-              <div class="bolt"></div>
-            </div>
-          </div>
+<!--          <div class="box thunderStorm">-->
+<!--            <div class="cloud"></div>-->
+<!--            <div class="lightning">-->
+<!--              <div class="bolt"></div>-->
+<!--              <div class="bolt"></div>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="box flurries">
-            <div class="cloud"></div>
-            <div class="snow">
-              <div class="flake"></div>
-              <div class="flake"></div>
-            </div>
-          </div>
-        </div>
+<!--          <div class="box flurries">-->
+<!--            <div class="cloud"></div>-->
+<!--            <div class="snow">-->
+<!--              <div class="flake"></div>-->
+<!--              <div class="flake"></div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <!--        <router-link to="/spaces">-->
 <!--        <a-menu-item key="4" class="userspace">-->
         <router-link to="/spaces" @click="key4">
